@@ -1,0 +1,15 @@
+{
+  "db": {
+    "uri": "mongodb://127.0.0.1:27017/msdb",
+    "options": {
+      "useNewUrlParser": true,
+      "useUnifiedTopology": true
+    }
+  },
+  "jwt": {
+    "secret": "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAN2xAgD7SjTUx+9ruDMFr5hGd1ojWufq",
+    "options": {
+      "expiresIn": "10m"
+    }
+  }
+}
