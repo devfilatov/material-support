@@ -9,7 +9,7 @@
   "jwt": {
     "secret": "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAN2xAgD7SjTUx+9ruDMFr5hGd1ojWufq",
     "options": {
-      "expiresIn": "10m"
+      "expiresIn": "1h"
     }
   }
 }

@@ -12,7 +12,6 @@ const Login = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     CommonStore.set({ loading: true });
-
     Request.post("auth", { email, password })
       .then(({ token }) => CommonStore.set({ token }))
       .catch((err) => toast.warn(err.message))
@@ -20,29 +19,27 @@ const Login = () => {
   };
 
   return (
-    <div className="app-login">
-      <Form className="d-flex flex-column justify-content-center">
-        <Form.Group className="mb-3">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group className="mb-4">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit" onClick={submitHandler}>
-          Submit
-        </Button>
-      </Form>
-    </div>
+    <Form className="align-self-center" style={{ width: "350px" }}>
+      <Form.Group className="mb-3">
+        <Form.Label>Email</Form.Label>
+        <Form.Control
+          type="email"
+          placeholder="Enter email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </Form.Group>
+      <Form.Group className="mb-4">
+        <Form.Label>Password</Form.Label>
+        <Form.Control
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </Form.Group>
+      <Button variant="primary" type="submit" className="w-100" onClick={submitHandler}>
+        Submit
+      </Button>
+    </Form>
   );
 };
 

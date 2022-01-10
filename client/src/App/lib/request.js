@@ -1,7 +1,8 @@
+import Helper from "../lib/helper";
 import CommonStore from "../store/common";
 
 const SERVER_URL = "http://127.0.0.1:8000";
-const PERFORM_DELAY = 1000;
+const PERFORM_DELAY = 500;
 
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -30,6 +31,10 @@ const perform = async (url, method, body) => {
   const response = await fetch(`${SERVER_URL}/${url}`, options);
   const json = await response.json();
   logger(response.status, json);
+
+  if (response.status === 401) {
+    Helper.logoutHandler();
+  }
 
   if (json.success) return json.data;
   else throw new Error(json.error);

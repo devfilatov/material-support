@@ -1,22 +1,19 @@
 import { useState, useEffect } from "react";
 import { useStore } from "@umbrellio/observable";
-import { Switch, Route, Redirect, useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 import Cookie from "./lib/cookie";
 import Request from "./lib/request";
 import CommonStore from "./store/common";
 import UsersStore from "./store/users";
-import { PrivateRoute, Loader } from "./components";
+import Loader from "./components/Loader";
+import Header from "./components/Header";
 import Home from "./pages/home";
 import Login from "./pages/login";
 
-import "react-toastify/dist/ReactToastify.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-
 const App = () => {
-  const history = useHistory();
   const { token, loading } = useStore(CommonStore);
+  const { current: currentUser } = useStore(UsersStore);
   const [authed, setAuthed] = useState(false);
 
   useEffect(() => {
@@ -25,26 +22,31 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (!token) return null;
-    CommonStore.set({ loading: true });
-    Cookie.set("token", token);
-    Request.get("users/self")
-      .then(({ user }) => {
-        UsersStore.set({ current: user });
-        setAuthed(true);
-        history.push("/home");
-      })
-      .catch((err) => toast.warn(err.message))
-      .finally(() => CommonStore.set({ loading: false }));
+    setAuthed(false);
+    if (token) {
+      CommonStore.set({ loading: true });
+      Cookie.set("token", token);
+      Request.get("users/self")
+        .then(({ user }) => {
+          UsersStore.set({ current: user });
+          setAuthed(true);
+        })
+        .catch((err) => toast.warn(err.message))
+        .finally(() => CommonStore.set({ loading: false }));
+    } else {
+      Cookie.delete("token");
+    }
   }, [token]);
 
+  const renderContent = () => {
+    const content = currentUser && authed ? <Home /> : <Login />;
+    return <div className="d-flex flex-grow-1 justify-content-center p-5">{content}</div>;
+  };
+
   return (
-    <div className="app-container">
-      <Switch>
-        <PrivateRoute exact available={authed} path="/home" component={Home} />
-        <Route exact path="/login" component={Login} />
-        <Redirect to="/home" />
-      </Switch>
+    <div className="app-container bg-main">
+      <Header />
+      {renderContent()}
       {loading && <Loader />}
       <ToastContainer position="bottom-right" />
     </div>

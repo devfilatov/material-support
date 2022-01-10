@@ -7,13 +7,13 @@ const { JwtService } = require("../services");
 
 const authenticate = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (user && bcrypt.compareSync(password, user.passwordHash)) {
-    const payload = { id: user._id, email: user.email, roles: [user.role] };
-    const token = JwtService.sign(payload);
-    return res.status(200).send({ success: true, data: { token } });
+  const user = await User.findOne({ email }).select("+passwordHash");
+  if (user && password && bcrypt.compareSync(password, user.passwordHash)) {
+    const { _id: id, email, role } = user;
+    const token = JwtService.sign({ id, email, role });
+    res.status(200).send({ success: true, data: { token } });
   } else {
-    throw new Error("Invalid username or password");
+    throw new Error("Invalid email or password");
   }
 };
 

@@ -1,18 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Router } from "react-router";
-import { createBrowserHistory } from "history";
 
 import App from "./App";
-import "./index.css";
+import ErrorBoundary from "./utils/ErrorBoundary";
 
-const history = createBrowserHistory();
+import "react-toastify/dist/ReactToastify.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./index.css";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router history={history}>
+    <ErrorBoundary>
       <App />
-    </Router>
+    </ErrorBoundary>
   </React.StrictMode>,
   document.getElementById("root")
 );
